@@ -57,12 +57,14 @@ function getRandomTheme(exclude) {
 function applyThemeToCard(card, key) {
     const t = themes[key];
     if (!t) return;
+
     card.dataset.theme = key;
     card.style.setProperty("--c1", t.accentPrimary);
     card.style.setProperty("--c2", t.accentSecondary);
     card.style.setProperty("--cardBg", t.cardBg);
     card.style.setProperty("--text", t.text);
     card.style.setProperty("--muted", t.textSecondary);
+
     const btn = card.querySelector(".btn-theme");
     if (btn) btn.textContent = `Theme: ${t.name} 🎨`;
 }
@@ -74,7 +76,7 @@ const observer = new IntersectionObserver(
             else entry.target.classList.remove("show");
         });
     },
-    { threshold: 0 },
+    { threshold: 0.1 },
 );
 
 const developers = [
@@ -94,7 +96,7 @@ const developers = [
         id: 3,
         jobTitle: "Software Engineer",
         bio: "Improving my understanding of data structures and algorithms through daily practice.",
-        skills: ["JavaScript", "Algorithms", "Problem Solving", "Git"],
+        skills: ["JavaScript", "Algorithms", "Git", "Problem Solving"],
     },
     {
         id: 4,
@@ -199,12 +201,13 @@ const developers = [
         skills: ["LLMs", "Transformers", "Prompt Engineering", "Python"],
     },
 ];
+
 const generateDeveloperObj = () =>
     developers[Math.floor(Math.random() * developers.length)];
 
 async function getData() {
     try {
-        const res = await fetch("https://randomuser.me/api/?results=50");
+        const res = await fetch("https://dummyjson.com/users?limit=50");
         if (!res.ok) throw new Error("Failed to fetch");
         const data = await res.json();
         displayData(data);
@@ -213,80 +216,71 @@ async function getData() {
     }
 }
 
-function displayData(users) {
+function displayData(data) {
     let html = "";
 
-    users.results.forEach((user) => {
-        const {
-            name: { first, last },
-            email,
-            picture: { large: image },
-        } = user;
-
+    data.users.forEach((user) => {
+        const { firstName: first, lastName: last, email, image } = user;
         const dev = generateDeveloperObj();
 
         html += `
       <div class="card">
-        <img src="${image}" alt="${first} ${last}" />
-        <h2 class="title">${first} ${last}</h2>
-        <p class="job-title">${dev.jobTitle}</p>
-        <p class="bio">${dev.bio}</p>
-        <div class="skills-container">
-          <p class="skills-title">SKILLS:</p>
-          <div class="skills">
-            ${dev.skills.map((skill) => `<span class="skill">${skill}</span>`).join("")}
+        <div class="card-content">
+          <img src="${image}" alt="${first} ${last}" />
+          <h2 class="title">${first} ${last}</h2>
+          <p class="job-title">${dev.jobTitle}</p>
+          <p class="bio">${dev.bio}</p>
+
+          <div class="skills-container">
+            <p class="skills-title">SKILLS:</p>
+            <div class="skills">
+              ${dev.skills.map((skill) => `<span class="skill">${skill}</span>`).join("")}
+            </div>
+          </div>
+
+          <div class="email-container">
+            <i class="fa-regular fa-envelope"></i>
+            <p class="email">${email}</p>
+            <i class="fa-solid fa-copy copy-btn"></i>
+          </div>
+
+          <div class="social-icons">
+            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-facebook"></i></a>
+            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-linkedin"></i></a>
+            <a href="https://github.com" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-github"></i></a>
+            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-twitter"></i></a>
           </div>
         </div>
-        <div class="email-container">
-          <i class="fa-regular fa-envelope"></i>
-          <p class="email">${email}</p>
-          <i class="fa-solid fa-copy copy-btn"></i>
+
+        <div class="card-actions">
+          <button class="btn-theme" type="button">Change Theme 🎨</button>
         </div>
-        <div class="social-icons">
-          <a href="https://facebook.com" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-facebook"></i></a>
-          <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-linkedin"></i></a>
-          <a href="https://github.com" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-github"></i></a>
-          <a href="https://twitter.com" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-twitter"></i></a>
-        </div>
-        
-        <button class="btn-theme">Change Theme 🎨</button>
       </div>
     `;
     });
 
     cards.innerHTML = html;
 
+    // Apply initial themes without repeating consecutively
+    let lastIndex = -1;
     document.querySelectorAll(".card").forEach((card) => {
         observer.observe(card);
-        const key = themeKeys[Math.floor(Math.random() * themeKeys.length)];
-        applyThemeToCard(card, key);
+
+        let randomKey;
+        if (themeKeys.length > 1) {
+            do {
+                randomKey = Math.floor(Math.random() * themeKeys.length);
+            } while (lastIndex === randomKey);
+        } else {
+            randomKey = 0;
+        }
+
+        lastIndex = randomKey;
+        applyThemeToCard(card, themeKeys[randomKey]);
     });
 }
 
-cards.addEventListener("click", (e) => {
-    const btn = e.target.closest(".btn-theme");
-    if (btn) {
-        const card = btn.closest(".card");
-        const current = card.dataset.theme || "";
-        const next = getRandomTheme(current);
-        applyThemeToCard(card, next);
-        return;
-    }
-
-    if (e.target.classList.contains("copy-btn")) {
-        const email =
-            e.target.parentElement.querySelector(".email").textContent;
-        navigator.clipboard.writeText(email).then(() => {
-            e.target.classList.remove("fa-copy");
-            e.target.classList.add("fa-check-double");
-            setTimeout(() => {
-                e.target.classList.remove("fa-check-double");
-                e.target.classList.add("fa-copy");
-            }, 2000);
-        });
-    }
-});
-
+// Toast (one instance)
 let toastEl = null;
 let toastTimer = null;
 
@@ -305,15 +299,17 @@ function showToast(message, card) {
     toastEl.style.setProperty("--tc2", c2);
 
     toastEl.textContent = message;
-
     toastEl.classList.add("show");
+
     clearTimeout(toastTimer);
     toastTimer = setTimeout(() => {
         toastEl.classList.remove("show");
     }, 1800);
 }
 
+// ONE click handler (no duplication)
 cards.addEventListener("click", (e) => {
+    // Change theme
     const btn = e.target.closest(".btn-theme");
     if (btn) {
         const card = btn.closest(".card");
@@ -323,6 +319,7 @@ cards.addEventListener("click", (e) => {
         return;
     }
 
+    // Copy email
     if (e.target.classList.contains("copy-btn")) {
         const card = e.target.closest(".card");
         const email =

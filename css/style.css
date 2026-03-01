@@ -51,13 +51,13 @@ body {
     max-width: 360px;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: stretch;
 
     --c1: #7c3aed;
     --c2: #22d3ee;
     --cardBg: rgba(255, 255, 255, 0.08);
 
-    padding: 22px;
+    padding: 0;
     border-radius: 22px;
     background: var(--cardBg);
     border: 1px solid var(--border);
@@ -84,13 +84,11 @@ body {
     padding: 1px;
     border-radius: 22px;
     background: linear-gradient(135deg, var(--c1), var(--c2));
-
     box-shadow:
         0 15px 40px rgba(0, 0, 0, 0.4),
         0 0 10px color-mix(in srgb, var(--c1) 50%, transparent),
         0 0 25px color-mix(in srgb, var(--c1) 40%, transparent),
         0 0 45px color-mix(in srgb, var(--c2) 35%, transparent);
-
     -webkit-mask:
         linear-gradient(#000 0 0) content-box,
         linear-gradient(#000 0 0);
@@ -109,9 +107,32 @@ body {
     transform: translateY(-6px);
     box-shadow:
         0 26px 70px rgba(0, 0, 0, 0.45),
-        0 0 40px rgba(0, 0, 0, 0),
         0 0 42px rgba(124, 58, 237, 0.3),
         0 0 58px rgba(34, 211, 238, 0.26);
+}
+
+.card .card-content {
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+}
+
+.card .card-actions {
+    padding: 0 22px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: auto;
+}
+
+.card .card-actions::before {
+    content: "";
+    display: block;
+    height: 1px;
+    margin: 0 0 14px;
+    background: rgba(255, 255, 255, 0.12);
 }
 
 .card img {
@@ -120,9 +141,7 @@ body {
     object-fit: cover;
     border-radius: 999px;
     border: 2px solid var(--c1);
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
     margin-top: 4px;
-
     box-shadow:
         0 26px 70px rgba(0, 0, 0, 0.45),
         0 0 40px color-mix(in srgb, var(--c1) 65%, transparent),
@@ -240,6 +259,11 @@ body {
     border-color: rgba(255, 255, 255, 0.22);
 }
 
+.card .email-container i {
+    color: var(--c1);
+    transition: color 180ms ease;
+}
+
 .card .social-icons {
     display: flex;
     justify-content: center;
@@ -247,18 +271,17 @@ body {
     gap: 12px;
     margin-top: 12px;
 }
+
 .card .social-icons a {
     text-decoration: none;
     width: 42px;
     height: 42px;
     display: grid;
     place-items: center;
-
     border-radius: 14px;
     background: rgba(255, 255, 255, 0.1);
     border: 1px solid rgba(255, 255, 255, 0.14);
-
-    color: var(--c1); /* 🔥 هنا */
+    color: var(--c1);
     transition:
         transform 180ms ease,
         background 180ms ease,
@@ -266,10 +289,6 @@ body {
         color 180ms ease;
 }
 
-.card .email-container i {
-    color: var(--c1);
-    transition: color 180ms ease;
-}
 .card .social-icons a:hover {
     transform: translateY(-2px);
     background: rgba(255, 255, 255, 0.16);
@@ -277,7 +296,7 @@ body {
 }
 
 .btn-theme {
-    margin-top: 16px;
+    margin-top: 0;
     width: 100%;
     border: 0;
     border-radius: 14px;
@@ -292,7 +311,6 @@ body {
     );
     box-shadow:
         0 10px 26px rgba(0, 0, 0, 0.35),
-        0 0 22px rgba(0, 0, 0, 0),
         0 0 18px rgba(124, 58, 237, 0.22),
         0 0 18px rgba(34, 211, 238, 0.18);
     cursor: pointer;
@@ -364,13 +382,11 @@ body {
     opacity: 0;
     pointer-events: none;
     z-index: 9999;
-
     padding: 12px 14px;
     border-radius: 14px;
     font-weight: 700;
     letter-spacing: 0.2px;
     color: rgba(255, 255, 255, 0.92);
-
     background: linear-gradient(135deg, var(--tc1), var(--tc2));
     border: 1px solid rgba(255, 255, 255, 0.16);
     box-shadow:
@@ -379,7 +395,6 @@ body {
         0 0 40px color-mix(in srgb, var(--tc2) 45%, transparent);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-
     transition:
         opacity 180ms ease,
         transform 180ms ease;
