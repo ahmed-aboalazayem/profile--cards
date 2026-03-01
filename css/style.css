@@ -1,0 +1,391 @@
+:root {
+    --gradientFrom: #070b14;
+    --gradientTo: #0b1220;
+
+    --orb1: rgba(99, 102, 241, 0.45);
+    --orb2: rgba(16, 185, 129, 0.35);
+    --orb3: rgba(236, 72, 153, 0.25);
+
+    --surface: rgba(255, 255, 255, 0.08);
+    --surface-2: rgba(255, 255, 255, 0.12);
+    --border: rgba(255, 255, 255, 0.14);
+    --text: rgba(255, 255, 255, 0.92);
+    --muted: rgba(255, 255, 255, 0.72);
+    --shadow: 0 18px 50px rgba(0, 0, 0, 0.35);
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    font-family:
+        system-ui,
+        -apple-system,
+        "Roboto",
+        sans-serif;
+    line-height: 1.5;
+    color: var(--text);
+    background:
+        radial-gradient(900px 500px at 10% 10%, var(--orb1), transparent 55%),
+        radial-gradient(900px 500px at 90% 20%, var(--orb2), transparent 55%),
+        radial-gradient(900px 500px at 50% 90%, var(--orb3), transparent 60%),
+        linear-gradient(180deg, var(--gradientFrom) 0%, var(--gradientTo) 100%);
+}
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+    padding: clamp(18px, 3vw, 36px);
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.card {
+    width: 100%;
+    max-width: 360px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    --c1: #7c3aed;
+    --c2: #22d3ee;
+    --cardBg: rgba(255, 255, 255, 0.08);
+
+    padding: 22px;
+    border-radius: 22px;
+    background: var(--cardBg);
+    border: 1px solid var(--border);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+
+    opacity: 0;
+    transform: translateY(50px);
+    transition:
+        transform 220ms ease,
+        background 220ms ease,
+        border-color 220ms ease,
+        box-shadow 220ms ease,
+        opacity 220ms ease;
+
+    position: relative;
+    overflow: hidden;
+}
+
+.card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    padding: 1px;
+    border-radius: 22px;
+    background: linear-gradient(135deg, var(--c1), var(--c2));
+
+    box-shadow:
+        0 15px 40px rgba(0, 0, 0, 0.4),
+        0 0 10px color-mix(in srgb, var(--c1) 50%, transparent),
+        0 0 25px color-mix(in srgb, var(--c1) 40%, transparent),
+        0 0 45px color-mix(in srgb, var(--c2) 35%, transparent);
+
+    -webkit-mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+    opacity: 0.9;
+}
+
+.card.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.card:hover {
+    transform: translateY(-6px);
+    box-shadow:
+        0 26px 70px rgba(0, 0, 0, 0.45),
+        0 0 40px rgba(0, 0, 0, 0),
+        0 0 42px rgba(124, 58, 237, 0.3),
+        0 0 58px rgba(34, 211, 238, 0.26);
+}
+
+.card img {
+    width: 92px;
+    height: 92px;
+    object-fit: cover;
+    border-radius: 999px;
+    border: 2px solid var(--c1);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+    margin-top: 4px;
+
+    box-shadow:
+        0 26px 70px rgba(0, 0, 0, 0.45),
+        0 0 40px color-mix(in srgb, var(--c1) 65%, transparent),
+        0 0 65px color-mix(in srgb, var(--c2) 60%, transparent);
+}
+
+.card .title {
+    margin: 14px 0 6px;
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+}
+
+.card .job-title {
+    margin: 0 0 10px;
+    color: rgba(255, 255, 255, 0.82);
+    font-size: 0.95rem;
+}
+
+.card .bio {
+    margin: 0 0 16px;
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.95rem;
+    max-width: 32ch;
+}
+
+.card .skills-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin-top: 6px;
+}
+
+.card .skills-container .skills-title {
+    margin: 0;
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.82);
+}
+
+.card .skills-container .skills {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    cursor: default;
+}
+
+.card .skills-container .skills > * {
+    padding: 7px 10px;
+    border-radius: 15px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    color: rgba(255, 255, 255, 0.86);
+    font-size: 0.85rem;
+    transition:
+        transform 220ms ease,
+        background 220ms ease,
+        border-color 220ms ease;
+}
+
+.card .skills-container .skills > *:hover {
+    transform: translateY(-7px);
+    background: rgba(255, 255, 255, 0.14);
+    border-color: rgba(255, 255, 255, 0.22);
+}
+
+.card .email-container {
+    margin: 16px 0 10px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.card .email-container span,
+.card .email-container p,
+.card .email-container a {
+    color: rgba(255, 255, 255, 0.86);
+    text-decoration: none;
+    font-size: 0.92rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 22ch;
+    margin: 0;
+}
+
+.card .email-container .copy-btn {
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    background: rgba(255, 255, 255, 0.08);
+    cursor: pointer;
+    transition:
+        transform 180ms ease,
+        background 180ms ease,
+        border-color 180ms ease;
+}
+
+.card .email-container .copy-btn:hover {
+    transform: translateY(-2px);
+    background: rgba(255, 255, 255, 0.14);
+    border-color: rgba(255, 255, 255, 0.22);
+}
+
+.card .social-icons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    margin-top: 12px;
+}
+.card .social-icons a {
+    text-decoration: none;
+    width: 42px;
+    height: 42px;
+    display: grid;
+    place-items: center;
+
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+
+    color: var(--c1); /* 🔥 هنا */
+    transition:
+        transform 180ms ease,
+        background 180ms ease,
+        border-color 180ms ease,
+        color 180ms ease;
+}
+
+.card .email-container i {
+    color: var(--c1);
+    transition: color 180ms ease;
+}
+.card .social-icons a:hover {
+    transform: translateY(-2px);
+    background: rgba(255, 255, 255, 0.16);
+    border-color: rgba(255, 255, 255, 0.22);
+}
+
+.btn-theme {
+    margin-top: 16px;
+    width: 100%;
+    border: 0;
+    border-radius: 14px;
+    padding: 12px 14px;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+    color: rgba(255, 255, 255, 0.92);
+    background: linear-gradient(
+        135deg,
+        color-mix(in srgb, var(--c1) 85%, transparent),
+        color-mix(in srgb, var(--c2) 85%, transparent)
+    );
+    box-shadow:
+        0 10px 26px rgba(0, 0, 0, 0.35),
+        0 0 22px rgba(0, 0, 0, 0),
+        0 0 18px rgba(124, 58, 237, 0.22),
+        0 0 18px rgba(34, 211, 238, 0.18);
+    cursor: pointer;
+    transition:
+        transform 180ms ease,
+        filter 180ms ease,
+        box-shadow 180ms ease;
+}
+
+.btn-theme:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.05);
+    box-shadow:
+        0 16px 40px rgba(0, 0, 0, 0.45),
+        0 0 40px rgba(124, 58, 237, 0.28),
+        0 0 55px rgba(34, 211, 238, 0.24);
+}
+
+.btn-theme:active {
+    transform: translateY(0);
+}
+
+.btn-theme:focus-visible {
+    outline: 2px solid rgba(255, 255, 255, 0.7);
+    outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .card,
+    .card .social-icons a,
+    .btn-theme,
+    .card .skills-container .skills > *,
+    .card .email-container .copy-btn {
+        transition: none;
+    }
+    .card:hover,
+    .btn-theme:hover {
+        transform: none;
+    }
+}
+
+.loader {
+    margin: 200px auto;
+    width: 50px;
+    padding: 8px;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: #25b09b;
+    --_m:
+        conic-gradient(#0000 10%, #000), linear-gradient(#000 0 0) content-box;
+    -webkit-mask: var(--_m);
+    mask: var(--_m);
+    -webkit-mask-composite: source-out;
+    mask-composite: subtract;
+    animation: l3 1s infinite linear;
+}
+
+@keyframes l3 {
+    to {
+        transform: rotate(1turn);
+    }
+}
+
+.toast {
+    position: fixed;
+    left: 50%;
+    bottom: 22px;
+    transform: translateX(-50%) translateY(16px);
+    opacity: 0;
+    pointer-events: none;
+    z-index: 9999;
+
+    padding: 12px 14px;
+    border-radius: 14px;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+    color: rgba(255, 255, 255, 0.92);
+
+    background: linear-gradient(135deg, var(--tc1), var(--tc2));
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    box-shadow:
+        0 18px 50px rgba(0, 0, 0, 0.45),
+        0 0 28px color-mix(in srgb, var(--tc1) 55%, transparent),
+        0 0 40px color-mix(in srgb, var(--tc2) 45%, transparent);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+
+    transition:
+        opacity 180ms ease,
+        transform 180ms ease;
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
