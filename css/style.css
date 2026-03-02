@@ -37,6 +37,16 @@ body {
         linear-gradient(180deg, var(--gradientFrom) 0%, var(--gradientTo) 100%);
 }
 
+a {
+    -webkit-tap-highlight-color: transparent;
+    outline: none;
+}
+
+a:focus,
+a:active {
+    outline: none;
+}
+
 .cards {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -210,7 +220,7 @@ body {
 }
 
 .card .skills-container .skills > *:hover {
-    transform: translateY(-7px);
+    transform: translateY(-5px);
     background: rgba(255, 255, 255, 0.14);
     border-color: rgba(255, 255, 255, 0.22);
 }
@@ -273,6 +283,7 @@ body {
 }
 
 .card .social-icons a {
+    position: relative;
     text-decoration: none;
     width: 42px;
     height: 42px;
@@ -293,6 +304,38 @@ body {
     transform: translateY(-2px);
     background: rgba(255, 255, 255, 0.16);
     border-color: rgba(255, 255, 255, 0.22);
+}
+
+/* Tooltip text */
+.card .social-icons a::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 120%;
+    left: 50%;
+    transform: translateX(-50%) translateY(5px);
+
+    background: linear-gradient(
+        135deg,
+        color-mix(in srgb, var(--c1) 85%, transparent),
+        color-mix(in srgb, var(--c2) 85%, transparent)
+    );
+    color: #fff;
+    padding: 6px 10px;
+    font-size: 12px;
+    border-radius: 8px;
+    white-space: nowrap;
+
+    opacity: 0;
+    pointer-events: none;
+    transition:
+        opacity 180ms ease,
+        transform 180ms ease;
+}
+
+/* Show tooltip on hover */
+.card .social-icons a:hover::after {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
 }
 
 .btn-theme {
@@ -334,8 +377,8 @@ body {
 }
 
 .btn-theme:focus-visible {
-    outline: 2px solid rgba(255, 255, 255, 0.7);
-    outline-offset: 3px;
+    outline: none;
+    outline-offset: none;
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -76,7 +76,7 @@ const observer = new IntersectionObserver(
             else entry.target.classList.remove("show");
         });
     },
-    { threshold: 0.1 },
+    { threshold: 0.2 },
 );
 
 const developers = [
@@ -245,11 +245,22 @@ function displayData(data) {
           </div>
 
           <div class="social-icons">
-            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-facebook"></i></a>
-            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-linkedin"></i></a>
-            <a href="https://github.com" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-github"></i></a>
-            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-twitter"></i></a>
-          </div>
+            <a href="https://facebook.com" target="_blank" data-tooltip="Facebook">
+              <i class="fa-brands fa-facebook"></i>
+            </a>
+
+            <a href="https://linkedin.com" target="_blank" data-tooltip="LinkedIn">
+              <i class="fa-brands fa-linkedin"></i>
+            </a>
+
+            <a href="https://github.com" target="_blank"   data-tooltip="GitHub">
+              <i class="fa-brands fa-github"></i>
+            </a>
+
+            <a href="https://twitter.com" target="_blank" data-tooltip="Twitter">
+              <i class="fa-brands fa-twitter"></i>
+            </a>
+</div>
         </div>
 
         <div class="card-actions">
@@ -261,7 +272,6 @@ function displayData(data) {
 
     cards.innerHTML = html;
 
-    // Apply initial themes without repeating consecutively
     let lastIndex = -1;
     document.querySelectorAll(".card").forEach((card) => {
         observer.observe(card);
@@ -280,7 +290,7 @@ function displayData(data) {
     });
 }
 
-// Toast (one instance)
+// Copy Toast Implementation
 let toastEl = null;
 let toastTimer = null;
 
